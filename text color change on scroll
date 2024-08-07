@@ -1,0 +1,76 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Color Change</title>
+</head>
+
+<style>
+   body {
+    height: 2000px; /* For demonstration purposes to ensure scrolling */
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.content {
+    position: fixed;
+    top: 50px;
+    width: 100%;
+    text-align: center;
+}
+
+#text span {
+    transition: color 0.3s;
+}
+
+span.scrolled {
+    color: red;
+}
+
+
+</style>
+
+<body>
+    <div class="content">
+        <p id="text">Scroll down to change my color!</p>
+    </div>
+
+
+    <script>
+        
+document.addEventListener('DOMContentLoaded', function() {
+    const textElement = document.getElementById('text');
+    const words = textElement.textContent.split(' ');
+    
+    // Clear existing content and recreate it with spans
+    textElement.innerHTML = words.map(word => `<span>${word}</span>`).join(' ');
+
+    const spans = textElement.querySelectorAll('span');
+    const totalWords = spans.length;
+    const colorChangeThreshold = 100; // Adjust as needed
+    const scrollLimit = document.body.scrollHeight - window.innerHeight;
+    
+    function updateTextColor() {
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        const percentageScrolled = scrollPosition / scrollLimit;
+        const numWordsToColor = Math.floor(totalWords * percentageScrolled);
+
+        spans.forEach((span, index) => {
+            if (index < numWordsToColor) {
+                span.classList.add('scrolled');
+            } else {
+                span.classList.remove('scrolled');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', updateTextColor);
+    updateTextColor(); // Initial call to set the color based on the current scroll position
+});
+
+
+
+    </script>
+</body>
+</html>
